@@ -93,6 +93,16 @@ exports.install = function (Vue, globalOptions, useVuex, customTemplate) {
     mounted: function mounted() {
       var _this = this;
 
+      //------
+      this.showHeaderTable = this.$el.querySelector(".fht-show-header-table thead");
+      this.showBodyTable = this.$el.querySelector(".fht-table-wrapper .fht-tbody");
+
+      this.showBodyTable.addEventListener("scroll", function (e) {
+        _this.$emit("scroll-body", e);
+      });
+
+      //-------
+
       if (this.opts.saveState) {
         var state = JSON.parse(this.storage.getItem(this.stateKey));
 
