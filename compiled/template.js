@@ -20,17 +20,21 @@ module.exports = function (source) {
         var appendBody = this.$slots.appendBody ? this.$slots.appendBody : '';
         var afterBody = this.$slots.afterBody ? this.$slots.afterBody : '';
 
-        var headingsFake = headings.map(function () {
-            return h(
-                'th',
-                null,
-                [h(
-                    'div',
+        if (this.opts.isFixedMode) {
+            var headingsHidden = headings.map(function () {
+                return h(
+                    'th',
                     null,
-                    []
-                )]
-            );
-        });
+                    [h(
+                        'div',
+                        null,
+                        []
+                    )]
+                );
+            });
+        };
+
+        var classTable = 'table-responsive ' + (this.opts.isFixedMode ? 'fht-table-wrapper' : '');
 
         return h(
             'div',
@@ -49,8 +53,8 @@ module.exports = function (source) {
                 )]
             ), h(
                 'div',
-                { 'class': 'table-responsive fht-table-wrapper' },
-                [h(
+                { 'class': classTable },
+                [this.opts.isFixedMode && h(
                     'div',
                     { 'class': 'fht-fixed-body', style: 'width: 938px;' },
                     [h(
@@ -81,7 +85,7 @@ module.exports = function (source) {
                                 [h(
                                     'tr',
                                     null,
-                                    [headingsFake]
+                                    [headingsHidden]
                                 )]
                             ), footerHeadings, this.$slots.beforeBody, h(
                                 'tbody',
@@ -90,6 +94,22 @@ module.exports = function (source) {
                             ), this.$slots.afterBody]
                         )]
                     )]
+                ), !this.opts.isFixedMode && h(
+                    'table',
+                    { 'class': 'VueTables__table table  ' + this.opts.skin },
+                    [h(
+                        'thead',
+                        null,
+                        [h(
+                            'tr',
+                            null,
+                            [headings]
+                        ), this.$slots.beforeFilters, columnFilters, this.$slots.afterFilters]
+                    ), footerHeadings, this.$slots.beforeBody, h(
+                        'tbody',
+                        null,
+                        [this.$slots.prependBody, noResults, rows, this.$slots.appendBody]
+                    ), this.$slots.afterBody]
                 )]
             ), pagination, dropdownPaginationCount]
         );

@@ -94,13 +94,19 @@ exports.install = function (Vue, globalOptions, useVuex, customTemplate) {
       var _this = this;
 
       //------
-      this.showHeaderTable = this.$el.querySelector(".fht-show-header-table thead");
-      this.showBodyTable = this.$el.querySelector(".fht-table-wrapper .fht-tbody");
+      if (this.opts.isFixedMode) {
+        this.$el.querySelector(".table-responsive").style.height = this.opts.fixedHeight || "600px";
+        this.showHeaderTable = this.$el.querySelector(".fht-show-header-table");
+        this.showBodyTable = this.$el.querySelector(".fht-table-wrapper .fht-tbody");
 
-      this.showBodyTable.addEventListener("scroll", function (e) {
-        _this.$emit("scroll-body", e);
-      });
+        this.showBodyTable && this.showBodyTable.addEventListener && this.showBodyTable.addEventListener("scroll", function (e) {
+          var marginLeft = '-' + e.currentTarget.scrollLeft + 'px';
 
+          marginLeft != _this.showHeaderTable.style.marginLeft && (_this.showHeaderTable.style.marginLeft = marginLeft);
+
+          _this.$emit("scroll-body", e);
+        });
+      };
       //-------
 
       if (this.opts.saveState) {
@@ -180,6 +186,13 @@ exports.install = function (Vue, globalOptions, useVuex, customTemplate) {
         return this.opts.serverMultiSorting;
       }
     }
+    // watch: {
+    //   columns: function() {
+    //     //----
+
+    //     //------
+    //   }
+    // }
 
   }, state);
 
