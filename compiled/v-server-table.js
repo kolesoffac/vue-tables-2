@@ -185,14 +185,14 @@ exports.install = function (Vue, globalOptions, useVuex, customTemplate) {
       hasMultiSort: function hasMultiSort() {
         return this.opts.serverMultiSorting;
       }
-    },
-    watch: {
-      columns: function columns() {
-        //----
-
-        //------
-      }
     }
+    // watch: {
+    //   columns: function() {
+    //     //----
+
+    //     //------
+    //   }
+    // }
 
   }, state);
 
