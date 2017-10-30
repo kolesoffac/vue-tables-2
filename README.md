@@ -1,8 +1,10 @@
 # Vue Tables 2
 
-> Note: As of version 0.6.70 the `orderBy` option no longer defaults to the first column. Omitting this option will display the data in its original order.
+[![npm version](https://badge.fury.io/js/vue-tables-2.svg)](https://badge.fury.io/js/vue-tables-2) [![GitHub stars](https://img.shields.io/github/stars/matfish2/vue-tables-2.svg)](https://github.com/matfish2/vue-tables-2/stargazers) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/matfish2/vue-tables-2/master/LICENSE) 
 
-[![npm version](https://badge.fury.io/js/vue-tables-2.svg)](https://badge.fury.io/js/vue-tables-2) [![GitHub stars](https://img.shields.io/github/stars/matfish2/vue-tables-2.svg)](https://github.com/matfish2/vue-tables-2/stargazers) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/matfish2/vue-tables-2/master/LICENSE)
+To help me maintain this project and add cool new features at your request, any donation would be appreciated.
+
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=W7EU772PUC3V4)
 
 - [Usage](#usage)
 - [Dependencies](#dependencies)
@@ -196,6 +198,8 @@ If you are using Vue 2.1.0 and above, you can use [scoped slots](https://vuejs.o
 </v-client-table>
 ```
 
+Note: You can get the index of the current row relative to the entire data set using `props.index`
+
 ## Virtual DOM Functions
 
 The syntax for Virtual DOM function is similar to that of `render` functions, as it leverages the virtual DOM to bind the templates into the main table template.
@@ -210,7 +214,7 @@ columns: ['erase'],
 options: {
 ...
 templates: {
-erase: function(h, row) {
+erase: function(h, row, index) {
 return <delete id={row.id}></delete>
 }
 }
@@ -227,7 +231,7 @@ Note: when using a `.vue` file `jsx` must be imported from a dedicated `.jsx` fi
 edit.jsx
 
 ```js
-export default function(h, row) {
+export default function(h, row, index) {
 return <a class='fa fa-edit' href={'#/' + row.id + '/edit'}></a>
 }
 ```
@@ -245,11 +249,11 @@ app.vue
 ```
 
 ## Vue Components
-Another option to for creating templates is to encapsulate the template within a component and pass the name. The component must have a `data` property, which will receive the row object. E.g:
+Another option to for creating templates is to encapsulate the template within a component and pass the name. The component must have a `data` property, which will receive the row object. You can also add an optional `index` prop, to get the non-zero-based index of the current row relative to the entire dataset. E.g:
 
 ```js
 Vue.component('delete', {
-props:['data'],
+props:['data', 'index'],
 template:`<a class='delete' @click='erase'></a>`,
 methods:{
 erase() {
@@ -279,7 +283,7 @@ edit.vue
 </template>
 <script>
   export default {
-    props:['data'],
+    props:['data', 'index'],
   }
 </script>
 ```
@@ -652,6 +656,7 @@ headings | Object | Table headings. | Can be either a string or a function, if y
 headingsTooltips | Object | Table headings tooltips. | Can be either a string or a function, if you wish to inject vue-compiled HTML. Renders as `title` attribute of `<th>`. <br>E.g: `function(h) { return 'Expanded Title'}`<br>The `this` context inside the function refers to the direct parent of the table instance.
 highlightMatches | Boolean | Highlight matches | `false`
 initFilters | Object | Set initial values for all filter types: generic, by column or custom.<br><br> Accepts an object of key-value pairs, where the key is one of the following: <br><br>a. "GENERIC" - for the generic filter<br>b. column name - for by column filters.<br>c. filter name - for custom filters. <br><br>In case of date filters the date range should be passed as an object comprised of start and end properties, each being a moment object. | `{}`
+initialPage | Number | Set the initial page to be displayed when the table loads | 1
 listColumns | Object | See [documentation](#list-filters) | {}
 multiSorting (client-side) | Object | See [documentation](#multiple-sotring) | {}
 orderBy.ascending | Boolean | initial order direction | `orderBy: { ascending:true }`
