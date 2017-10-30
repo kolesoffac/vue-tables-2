@@ -12,7 +12,7 @@ module.exports = function (h, that) {
     []
   ));
 
-  that.allColumns.map(function (column) {
+  that.allColumns.map(function (column, index) {
     headings.push(h(
       "th",
       {
@@ -28,6 +28,22 @@ module.exports = function (h, that) {
         [that.getHeading(column, h)]
       ), sortControl(column)]
     ));
+
+    //recalc width column
+    that.$nextTick(function () {
+      if (that.opts.isFixedMode) {
+        var tr = that.showBodyTable.querySelector("thead tr");
+        var th = that.showHeaderTable.querySelector("th:nth-child(" + (index + 1) + ")");
+        var selector = "th:nth-child(" + (index + 1) + ")";
+
+        if (that.opts.widthColumns) {
+          var width = that.opts.widthColumns[column] ? that.opts.widthColumns[column] : th.clientWidth;
+
+          tr.querySelector(selector).width = width;
+          th.width = width;
+        };
+      };
+    });
   }.bind(that));
 
   if (that.hasChildRow && !that.opts.childRowTogglerFirst) headings.push(h(
