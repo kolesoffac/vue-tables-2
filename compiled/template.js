@@ -2,6 +2,7 @@
 
 module.exports = function (source) {
     return function (h) {
+        var _this = this;
 
         var rows = require('./template/rows')(h, this);
         var normalFilter = require('./template/normal-filter')(h, this);
@@ -32,9 +33,49 @@ module.exports = function (source) {
                     )]
                 );
             });
+
+            var fakeThead = h(
+                'thead',
+                null,
+                [h(
+                    'tr',
+                    null,
+                    [headingsHidden]
+                )]
+            );
         };
 
         var classTable = 'table-responsive ' + (this.opts.isFixedMode ? 'fht-table-wrapper' : '');
+        var currentThead = h(
+            'thead',
+            null,
+            [h(
+                'tr',
+                null,
+                [headings]
+            ), this.$slots.beforeFilters, columnFilters, this.$slots.afterFilters]
+        );
+
+        var getTable = function getTable(_ref) {
+            var _ref$style = _ref.style,
+                style = _ref$style === undefined ? "" : _ref$style,
+                _ref$classes = _ref.classes,
+                classes = _ref$classes === undefined ? "" : _ref$classes,
+                _ref$thead = _ref.thead,
+                thead = _ref$thead === undefined ? "" : _ref$thead,
+                _ref$tbody = _ref.tbody,
+                tbody = _ref$tbody === undefined ? false : _ref$tbody;
+
+            return h(
+                'table',
+                { 'class': 'VueTables__table table ' + classes + ' ' + _this.opts.skin, style: style },
+                [thead && thead, tbody && footerHeadings, tbody && beforeBody, tbody && h(
+                    'tbody',
+                    null,
+                    [prependBody, noResults, rows, appendBody]
+                ), tbody && afterBody]
+            );
+        };
 
         return h(
             'div',
@@ -60,57 +101,13 @@ module.exports = function (source) {
                     [h(
                         'div',
                         { 'class': 'fht-thead' },
-                        [h(
-                            'table',
-                            { 'class': 'VueTables__table table fht-table fht-show-header-table ' + this.opts.skin, style: 'width: 1100px;margin-left: 0px;' },
-                            [h(
-                                'thead',
-                                null,
-                                [h(
-                                    'tr',
-                                    null,
-                                    [headings]
-                                ), this.$slots.beforeFilters, columnFilters, this.$slots.afterFilters]
-                            )]
-                        )]
+                        [getTable({ thead: currentThead, classes: "fht-table fht-show-header-table", style: "width: 1100px;margin-left: 0px;" })]
                     ), h(
                         'div',
                         { 'class': 'fht-tbody', style: 'height: 340px;' },
-                        [h(
-                            'table',
-                            { 'class': 'VueTables__table table fht-table fht-show-body-table ' + this.opts.skin, style: 'width: 1100px;margin-top: 0px;' },
-                            [h(
-                                'thead',
-                                null,
-                                [h(
-                                    'tr',
-                                    null,
-                                    [headingsHidden]
-                                )]
-                            ), footerHeadings, this.$slots.beforeBody, h(
-                                'tbody',
-                                null,
-                                [this.$slots.prependBody, noResults, rows, this.$slots.appendBody]
-                            ), this.$slots.afterBody]
-                        )]
+                        [getTable({ thead: fakeThead, tbody: true, classes: "fht-table fht-show-header-table", style: "width: 1100px;margin-top: 0px;" })]
                     )]
-                ), !this.opts.isFixedMode && h(
-                    'table',
-                    { 'class': 'VueTables__table table  ' + this.opts.skin },
-                    [h(
-                        'thead',
-                        null,
-                        [h(
-                            'tr',
-                            null,
-                            [headings]
-                        ), this.$slots.beforeFilters, columnFilters, this.$slots.afterFilters]
-                    ), footerHeadings, this.$slots.beforeBody, h(
-                        'tbody',
-                        null,
-                        [this.$slots.prependBody, noResults, rows, this.$slots.appendBody]
-                    ), this.$slots.afterBody]
-                )]
+                ), !this.opts.isFixedMode && getTable({ thead: currentThead, tbody: true })]
             ), pagination, dropdownPaginationCount]
         );
     };
