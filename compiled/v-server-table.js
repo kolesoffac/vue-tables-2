@@ -67,7 +67,7 @@ exports.install = function (Vue, globalOptions, useVuex, customTemplate) {
       if (!this.vuex) {
         this.query = this.initQuery();
 
-        this.initOrderBy(this.Columns[0]);
+        this.initOrderBy();
       }
 
       if (!this.vuex) {
@@ -123,6 +123,8 @@ exports.install = function (Vue, globalOptions, useVuex, customTemplate) {
 
       this.registerServerFilters();
 
+      if (this.options.initialPage) this.setPage(this.options.initialPage, true);
+
       _vuePagination.PaginationEvent.$on('vue-pagination::' + this.id, function (page) {
 
         this.setPage(page);
@@ -135,7 +137,7 @@ exports.install = function (Vue, globalOptions, useVuex, customTemplate) {
         loading: true,
         lastKeyStrokeAt: false,
         globalOptions: globalOptions
-      }, (0, _data3.default)(useVuex, 'server'));
+      }, (0, _data3.default)(useVuex, 'server', this.options.initialPage));
     },
     methods: {
       refresh: require('./methods/refresh'),
@@ -150,6 +152,7 @@ exports.install = function (Vue, globalOptions, useVuex, customTemplate) {
 
         if (!this.storage.getItem(this.stateKey)) {
           this.initState();
+          this.activeState = true;
           return;
         }
 
