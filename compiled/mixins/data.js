@@ -5,7 +5,10 @@ module.exports = function () {
     id: makeId(),
     rowsToggleState: {},
     windowWidth: window.innerWidth,
-    userMultiSorting: {}
+    userMultiSorting: {},
+    //for fixed grid
+    currentScrollTop: 0,
+    currentScrollLeft: 0
   };
 };
 

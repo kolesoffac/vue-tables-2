@@ -1,53 +1,40 @@
-"use strict";
+'use strict';
 
 module.exports = function (h, that) {
 
   var sortControl = require('./sort-control')(h, that);
+  var recalcWidth = require('../methods/recalc-width')(that);
 
   var headings = [];
 
   if (that.hasChildRow && that.opts.childRowTogglerFirst) headings.push(h(
-    "th",
+    'th',
     null,
     []
   ));
 
   that.allColumns.map(function (column, index) {
     headings.push(h(
-      "th",
+      'th',
       {
         on: {
-          "click": that.orderByColumn.bind(that, column)
+          'click': that.orderByColumn.bind(that, column)
         },
 
-        "class": that.sortableClass(column) },
+        'class': that.sortableClass(column) },
       [h(
-        "span",
-        { "class": "VueTables__heading", attrs: { title: that.getHeadingTooltip(column, h) }
+        'span',
+        { 'class': 'VueTables__heading', attrs: { title: that.getHeadingTooltip(column, h) }
         },
         [that.getHeading(column, h)]
       ), sortControl(column)]
     ));
 
-    //recalc width column
-    that.$nextTick(function () {
-      if (that.opts.isFixedMode) {
-        var tr = that.showBodyTable.querySelector("thead tr");
-        var th = that.showHeaderTable.querySelector("th:nth-child(" + (index + 1) + ")");
-        var selector = "th:nth-child(" + (index + 1) + ")";
-
-        if (that.opts.widthColumns) {
-          var width = that.opts.widthColumns[column] ? that.opts.widthColumns[column] : th.clientWidth;
-
-          tr.querySelector(selector).width = width;
-          th.width = width;
-        };
-      };
-    });
+    recalcWidth(column, index);
   }.bind(that));
 
   if (that.hasChildRow && !that.opts.childRowTogglerFirst) headings.push(h(
-    "th",
+    'th',
     null,
     []
   ));
