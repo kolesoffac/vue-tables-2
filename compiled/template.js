@@ -94,7 +94,7 @@ module.exports = function (source) {
                 )]
             ), h(
                 'div',
-                { 'class': classTable },
+                { 'class': classTable, style: 'height: ' + this.opts.fixedHeight + 'px' },
                 [this.opts.isFixedMode && h(
                     'div',
                     { 'class': 'fht-fixed-body', style: 'width: 938px;' },
