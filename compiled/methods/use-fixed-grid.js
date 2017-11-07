@@ -9,6 +9,9 @@ module.exports = function (that) {
 			this.showHeaderTable = this.$el.querySelector(".fht-show-header-table");
 			this.showBodyTable = this.$el.querySelector(".fht-table-wrapper .fht-tbody");
 
+			this.fixedWidthAreaTable = this.$el.querySelector(".table-responsive").clientWidth;
+			this.$el.querySelector(".table-responsive").style.height = this.opts.fixedHeight + "px" || "600px";
+
 			this.showBodyTable && this.showBodyTable.addEventListener && this.showBodyTable.addEventListener("scroll", function (e) {
 				var marginLeft = "-" + e.currentTarget.scrollLeft + "px";
 

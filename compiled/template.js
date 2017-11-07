@@ -97,15 +97,15 @@ module.exports = function (source) {
                 { 'class': classTable, style: 'height: ' + this.opts.fixedHeight + 'px' },
                 [this.opts.isFixedMode && h(
                     'div',
-                    { 'class': 'fht-fixed-body', style: 'width: 938px;' },
+                    { 'class': 'fht-fixed-body', style: 'width: ' + this.fixedWidthAreaTable + 'px;' },
                     [h(
                         'div',
                         { 'class': 'fht-thead' },
-                        [getTable({ thead: currentThead, classes: "fht-table fht-show-header-table", style: "width: 1100px;margin-left: 0px;" })]
+                        [getTable({ thead: currentThead, classes: "fht-table fht-show-header-table", style: "" })]
                     ), h(
                         'div',
-                        { 'class': 'fht-tbody', style: 'height: 340px;' },
-                        [getTable({ thead: fakeThead, tbody: true, classes: "fht-table fht-show-header-table", style: "width: 1100px;margin-top: 0px;" })]
+                        { 'class': 'fht-tbody', style: 'height: ' + (this.opts.fixedHeight - 100) + 'px' },
+                        [getTable({ thead: fakeThead, tbody: true, classes: "fht-table fht-show-header-table", style: "" })]
                     )]
                 ), !this.opts.isFixedMode && getTable({ thead: currentThead, tbody: true })]
             ), pagination, dropdownPaginationCount]

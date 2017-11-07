@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = function (h, that) {
   if (that.opts.pagination && !that.opts.pagination.dropdown) {
@@ -6,15 +6,16 @@ module.exports = function (h, that) {
     var name = that.vuex ? that.name : that.id;
 
     return h(
-      "pagination",
+      'pagination',
       {
-        ref: "pagination",
-        attrs: { "for": name,
+        style: 'display:' + (that.opts.isInfinityScroll ? 'none' : 'block'),
+        ref: 'pagination',
+        attrs: { 'for': name,
           vuex: that.vuex,
           records: that.count,
-          "per-page": parseInt(that.limit),
+          'per-page': parseInt(that.limit),
           chunk: that.opts.pagination.chunk,
-          "count-text": that.opts.texts.count }
+          'count-text': that.opts.texts.count }
       },
       []
     );
