@@ -10,9 +10,10 @@ module.exports = function (that) {
 				var tr = _this.showBodyTable.querySelector("thead tr");
 				var th = _this.showHeaderTable.querySelector("th:nth-child(" + (index + 1) + ")");
 				var selector = "th:nth-child(" + (index + 1) + ")";
-				var width = void 0;
+				var width = void 0,
+				    widthColumn = void 0;
 
-				if (_this.opts.widthColumns) width = _this.opts.widthColumns[column];
+				if (_this.opts.widthColumns) widthColumn = _this.opts.widthColumns[column];
 
 				var div = document.createElement('div');
 
@@ -25,11 +26,13 @@ module.exports = function (that) {
 
 				document.body.removeChild(div);
 
-				width = width ? width : thClientWidth;
+				width = widthColumn ? widthColumn : thClientWidth;
 
 				var minWidthColumns = _this.opts.minWidthColumns;
 
 				var neWidth = minWidthColumns && width < minWidthColumns ? minWidthColumns : width;
+
+				neWidth = widthColumn ? widthColumn : neWidth;
 
 				tr.querySelector(selector).width = neWidth;
 				th.width = neWidth;
