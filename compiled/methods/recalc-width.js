@@ -29,9 +29,10 @@ module.exports = function (that) {
 
 				var minWidthColumns = _this.opts.minWidthColumns;
 
+				var neWidth = minWidthColumns && width < minWidthColumns ? minWidthColumns : width;
 
-				tr.querySelector(selector).width = minWidthColumns && width < minWidthColumns ? minWidthColumns : width;
-				th.width = width;
+				tr.querySelector(selector).width = neWidth;
+				th.width = neWidth;
 			});
 		};
 	}.bind(that);
